@@ -356,6 +356,91 @@
                 padding-bottom: 76px;
             }
         }
+
+        /* Onboarding Modal Styles */
+        .onboarding-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(30, 32, 40, 0.72);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .onboarding-modal {
+            background: #fff;
+            border-radius: 18px;
+            max-width: 95vw;
+            width: 370px;
+            padding: 32px 20px 24px 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            position: relative;
+            text-align: center;
+            animation: fadeIn 0.3s;
+        }
+        .onboarding-close {
+            position: absolute;
+            top: 14px; right: 16px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #888;
+            cursor: pointer;
+            z-index: 10;
+            line-height: 1;
+        }
+        .onboarding-modal h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #222;
+        }
+        .onboarding-sub {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 22px;
+        }
+        .onboarding-features {
+            margin-bottom: 24px;
+        }
+        .onboarding-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .onboarding-icon {
+            font-size: 1.7rem;
+            margin-top: 2px;
+        }
+        .onboarding-title {
+            font-weight: 600;
+            color: #222;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+        .onboarding-desc {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        .onboarding-btn {
+            width: 100%;
+            margin-top: 8px;
+            font-size: 1.1rem;
+            padding: 14px 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @media (max-width: 500px) {
+            .onboarding-modal {
+                width: 98vw;
+                padding: 18px 4vw 16px 4vw;
+            }
+        }
     </style>
 </head>
 <body>
@@ -373,6 +458,39 @@
         <div class="header">
             <h1>🎯 Revit</h1>
             <p>AI-Powered Feedback Platform on Farcaster</p>
+        </div>
+
+        <!-- Onboarding Modal -->
+        <div id="onboarding-modal" class="onboarding-overlay">
+            <div class="onboarding-modal">
+                <button class="onboarding-close" onclick="closeOnboarding()">&times;</button>
+                <h2>Welcome to Revit! 🎉</h2>
+                <p class="onboarding-sub">Your new way to request, give, and manage feedback on Farcaster</p>
+                <div class="onboarding-features">
+                    <div class="onboarding-feature">
+                        <span class="onboarding-icon">🎤</span>
+                        <div>
+                            <div class="onboarding-title">Easy Feedback Requests</div>
+                            <div class="onboarding-desc">Describe your needs by voice or text, and let AI generate questions for you.</div>
+                        </div>
+                    </div>
+                    <div class="onboarding-feature">
+                        <span class="onboarding-icon">💰</span>
+                        <div>
+                            <div class="onboarding-title">Earn & Reward</div>
+                            <div class="onboarding-desc">Contributors earn crypto for quality feedback. Reward the best responses!</div>
+                        </div>
+                    </div>
+                    <div class="onboarding-feature">
+                        <span class="onboarding-icon">🤖</span>
+                        <div>
+                            <div class="onboarding-title">AI-Powered Insights</div>
+                            <div class="onboarding-desc">AI summarizes and scores responses to help you choose the best feedback.</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn onboarding-btn" onclick="closeOnboarding()">Get Started</button>
+            </div>
         </div>
 
         <!-- Feedback Request Flow -->
@@ -867,6 +985,15 @@
                     document.getElementById('questionnaire-preview').classList.remove('hidden');
                 });
             }
+        });
+
+        function closeOnboarding() {
+            document.getElementById('onboarding-modal').style.display = 'none';
+        }
+
+        // Optionally, show only on first load or demo
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('onboarding-modal').style.display = 'flex';
         });
     </script>
 </body>
