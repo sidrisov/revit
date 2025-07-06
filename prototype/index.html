@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revit - AI-Powered Feedback Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #f0f0f0;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .flow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 24px;
+            border-left: 4px solid #667eea;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .step h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .step p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .demo-area {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .demo-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .demo-card h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .demo-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .mock-form {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .audio-recorder {
+            background: #f8f9fa;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .audio-recorder:hover {
+            border-color: #667eea;
+        }
+
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .farcaster-badge {
+            background: #8B5CF6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Revit</h1>
+            <p>AI-Powered Feedback Platform on Farcaster</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('request')">Request Feedback</button>
+            <button class="nav-tab" onclick="showSection('respond')">Respond to Requests</button>
+            <button class="nav-tab" onclick="showSection('manage')">Manage Requests</button>
+        </div>
+
+        <!-- Feedback Request Flow -->
+        <div id="request-section" class="content-section">
+            <h2 class="section-title">Request Feedback Flow</h2>
+            
+            <div class="flow-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Create Request</h3>
+                    <p>Record audio or write text to describe your feedback needs</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>AI Generates Questions</h3>
+                    <p>Our AI creates a targeted questionnaire based on your input</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Set Deposit & Publish</h3>
+                    <p>Set cryptocurrency deposit and minimum response target</p>
+                </div>
+            </div>
+
+            <div class="demo-area">
+                <h3 class="demo-title">Try It Out</h3>
+                
+                <div class="demo-content">
+                    <div class="demo-card">
+                        <h4>🎤 Record Audio</h4>
+                        <p>Describe your feedback needs by voice</p>
+                        <div class="audio-recorder">
+                            <div class="icon">🎙️</div>
+                            <p>Click to start recording</p>
+                            <button class="btn">Start Recording</button>
+                        </div>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h4>✏️ Write Text</h4>
+                        <p>Or describe your needs in writing</p>
+                        <div class="mock-form">
+                            <div class="form-group">
+                                <label>What do you need feedback on?</label>
+                                <textarea placeholder="Describe your project, idea, or work that needs feedback..."></textarea>
+                            </div>
+                            <button class="btn">Generate Questions</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="questionnaire-preview" class="hidden">
+                    <h4>AI-Generated Questionnaire</h4>
+                    <div class="mock-form">
+                        <div class="form-group">
+                            <label>1. What is the main goal of this project?</label>
+                            <input type="text" placeholder="Question will be generated...">
+                        </div>
+                        <div class="form-group">
+                            <label>2. What specific aspects need feedback?</label>
+                            <input type="text" placeholder="Question will be generated...">
+                        </div>
+                        <div class="form-group">
+                            <label>3. What's your target audience?</label>
+                            <input type="text" placeholder="Question will be generated...">
+                        </div>
+                        <button class="btn">Edit Questions</button>
+                        <button class="btn btn-secondary">Continue to Setup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Response Flow -->
+        <div id="respond-section" class="content-section hidden">
+            <h2 class="section-title">Respond to Feedback Requests</h2>
+            
+            <div class="flow-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Browse Requests</h3>
+                    <p>Find feedback opportunities that match your expertise</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Review Details</h3>
+                    <p>Listen to audio or read the brief, then answer questions</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Submit & Earn</h3>
+                    <p>Get guaranteed payment plus potential bonus rewards</p>
+                </div>
+            </div>
+
+            <div class="demo-area">
+                <h3 class="demo-title">Available Requests</h3>
+                
+                <div class="demo-content">
+                    <div class="demo-card">
+                        <h4>🎨 Design Portfolio Review <span class="farcaster-badge">@alice</span></h4>
+                        <p>Looking for feedback on my UI/UX portfolio for job applications</p>
+                        <div style="margin: 15px 0;">
+                            <span class="status-badge status-info">💰 $5 reward</span>
+                            <span class="status-badge status-pending">⏰ 2 days left</span>
+                        </div>
+                        <button class="btn" onclick="showRequestDetail('design-portfolio')">View Details</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h4>💻 Code Review <span class="farcaster-badge">@bob</span></h4>
+                        <p>Need feedback on my React component architecture</p>
+                        <div style="margin: 15px 0;">
+                            <span class="status-badge status-info">💰 $8 reward</span>
+                            <span class="status-badge status-pending">⏰ 1 day left</span>
+                        </div>
+                        <button class="btn" onclick="showRequestDetail('code-review')">View Details</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h4>📝 Business Plan Feedback <span class="farcaster-badge">@charlie</span></h4>
+                        <p>Seeking input on my startup pitch deck and business model</p>
+                        <div style="margin: 15px 0;">
+                            <span class="status-badge status-info">💰 $10 reward</span>
+                            <span class="status-badge status-pending">⏰ 3 days left</span>
+                        </div>
+                        <button class="btn" onclick="showRequestDetail('business-plan')">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Detail View (for reviewing) -->
+        <div id="request-detail-section" class="content-section hidden">
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <button class="btn btn-secondary" onclick="goBack()" style="margin-right: 15px;">← Back</button>
+                <h2 class="section-title" style="margin: 0;">Request Details</h2>
+            </div>
+            
+            <div class="demo-area">
+                <div class="demo-content">
+                    <div class="demo-card" style="grid-column: 1 / -1;">
+                        <h3 id="request-title">🎨 Design Portfolio Review</h3>
+                        <p id="request-author">by <span class="farcaster-badge">@alice</span></p>
+                        
+                        <div style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                            <h4>📝 Brief</h4>
+                            <p id="request-description">I'm applying for senior UI/UX designer positions and need feedback on my portfolio. I've been working on it for months but want to make sure it effectively showcases my skills and experience. I'm particularly concerned about the case studies section and whether my design process is clearly communicated.</p>
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <h4>🎧 Audio Brief</h4>
+                            <div class="audio-player" style="background: #f0f0f0; padding: 15px; border-radius: 8px; text-align: center;">
+                                <div class="icon">🎙️</div>
+                                <p>Audio recording (2:34)</p>
+                                <button class="btn">Play Audio</button>
+                            </div>
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <h4>❓ Questions to Answer</h4>
+                            <div class="questionnaire">
+                                <div class="form-group">
+                                    <label>1. Does the portfolio effectively showcase the designer's skills and experience?</label>
+                                    <textarea placeholder="Share your thoughts on the overall presentation and skill demonstration..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>2. How well are the case studies structured and communicated?</label>
+                                    <textarea placeholder="Evaluate the clarity and depth of the case study presentations..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>3. What specific improvements would make this portfolio more compelling for senior positions?</label>
+                                    <textarea placeholder="Provide actionable suggestions for enhancement..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin: 20px 0; padding: 20px; background: #e8f5e8; border-radius: 8px;">
+                            <h4>💰 Reward Details</h4>
+                            <p><strong>Base Reward:</strong> $5 (guaranteed for all responses)</p>
+                            <p><strong>Bonus Potential:</strong> Up to $10 additional for exceptional feedback</p>
+                            <p><strong>Deadline:</strong> 2 days remaining</p>
+                        </div>
+
+                        <button class="btn" style="width: 100%; margin-top: 20px;">Submit Feedback</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Management Flow -->
+        <div id="manage-section" class="content-section hidden">
+            <h2 class="section-title">Manage Your Requests</h2>
+            
+            <div class="flow-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Review Responses</h3>
+                    <p>View all submitted feedback in organized format</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>AI Summary</h3>
+                    <p>Get AI-powered insights and scoring of responses</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Process Payments</h3>
+                    <p>Select bonus recipients and complete payments</p>
+                </div>
+            </div>
+
+            <div class="demo-area">
+                <h3 class="demo-title">Your Active Requests</h3>
+                
+                <div class="demo-content">
+                    <div class="demo-card">
+                        <h4>🎨 Design Portfolio Review</h4>
+                        <p>Looking for feedback on my UI/UX portfolio</p>
+                        <div style="margin: 15px 0;">
+                            <span class="status-badge status-success">✅ 12 responses</span>
+                            <span class="status-badge status-info">💰 $60 deposit</span>
+                        </div>
+                        <button class="btn" onclick="showMyRequestDetail('portfolio-review')">Review Responses</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h4>💻 Code Review</h4>
+                        <p>Need feedback on my React component architecture</p>
+                        <div style="margin: 15px 0;">
+                            <span class="status-badge status-pending">⏳ 5 responses</span>
+                            <span class="status-badge status-info">💰 $40 deposit</span>
+                        </div>
+                        <button class="btn" onclick="showMyRequestDetail('code-review-own')">View Progress</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Request Detail View (with feedback) -->
+        <div id="my-request-detail-section" class="content-section hidden">
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <button class="btn btn-secondary" onclick="goBack()" style="margin-right: 15px;">← Back</button>
+                <h2 class="section-title" style="margin: 0;">My Request: Portfolio Review</h2>
+            </div>
+            
+            <div class="demo-area">
+                <div class="demo-content">
+                    <!-- Request Overview -->
+                    <div class="demo-card" style="grid-column: 1 / -1;">
+                        <h3>🎨 Design Portfolio Review</h3>
+                        <div style="margin: 15px 0; display: flex; gap: 15px; flex-wrap: wrap;">
+                            <span class="status-badge status-success">✅ 12 responses received</span>
+                            <span class="status-badge status-info">💰 $60 total deposit</span>
+                            <span class="status-badge status-pending">⏰ 1 day remaining</span>
+                        </div>
+                        
+                        <div style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                            <h4>📝 Original Request</h4>
+                            <p>I'm applying for senior UI/UX designer positions and need feedback on my portfolio. I've been working on it for months but want to make sure it effectively showcases my skills and experience.</p>
+                        </div>
+                    </div>
+
+                    <!-- AI Summary -->
+                    <div class="demo-card" style="grid-column: 1 / -1;">
+                        <h4>🤖 AI Analysis Summary</h4>
+                        <div class="mock-form">
+                            <div class="form-group">
+                                <label>Key Insights</label>
+                                <textarea readonly>📊 Response Quality Distribution:
+• Excellent (9-10/10): 3 responses
+• Very Good (8-9/10): 5 responses  
+• Good (7-8/10): 3 responses
+• Fair (6-7/10): 1 response
+
+🎯 Common Themes:
+• Case studies need better problem-solution narrative
+• Visual hierarchy could be improved
+• Process documentation is strong
+• Portfolio layout is clean but could be more engaging
+
+💡 Top Recommendations:
+• Add more quantitative results to case studies
+• Include user research methodologies
+• Consider adding interactive prototypes
+• Strengthen the "About" section</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Individual Responses -->
+                    <div class="demo-card" style="grid-column: 1 / -1;">
+                        <h4>📝 Individual Responses</h4>
+                        
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h5>Response #3 - @designer1 <span class="status-badge status-success">9.2/10</span></h5>
+                                <button class="btn btn-secondary" onclick="toggleResponse('response-3')">View Details</button>
+                            </div>
+                            <div id="response-3" class="response-detail hidden">
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                    <p><strong>Q1:</strong> Your portfolio effectively showcases technical skills, but the storytelling could be stronger. Consider adding more context about the business impact of your designs.</p>
+                                    <p><strong>Q2:</strong> Case studies are well-structured but need more quantitative results. Show metrics like conversion rates, user engagement improvements, etc.</p>
+                                    <p><strong>Q3:</strong> For senior positions, emphasize leadership and strategic thinking. Add sections about design systems you've built and team collaboration.</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <button class="btn">Select for Bonus ($10)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h5>Response #7 - @designer2 <span class="status-badge status-success">8.8/10</span></h5>
+                                <button class="btn btn-secondary" onclick="toggleResponse('response-7')">View Details</button>
+                            </div>
+                            <div id="response-7" class="response-detail hidden">
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                    <p><strong>Q1:</strong> Strong technical execution, but the portfolio feels a bit generic. Consider adding your unique design philosophy and approach.</p>
+                                    <p><strong>Q2:</strong> Case studies are comprehensive but could benefit from more user research insights and testing methodologies.</p>
+                                    <p><strong>Q3:</strong> Add more about your design process and decision-making framework. Senior designers need to show strategic thinking.</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <button class="btn">Select for Bonus ($10)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h5>Response #11 - @designer3 <span class="status-badge status-success">8.5/10</span></h5>
+                                <button class="btn btn-secondary" onclick="toggleResponse('response-11')">View Details</button>
+                            </div>
+                            <div id="response-11" class="response-detail hidden">
+                                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                    <p><strong>Q1:</strong> Good range of projects, but consider adding more recent work that reflects current design trends and technologies.</p>
+                                    <p><strong>Q2:</strong> The case study format is clear, but add more about the challenges you faced and how you overcame them.</p>
+                                    <p><strong>Q3:</strong> Include more about your collaboration with developers and stakeholders. Senior roles require strong cross-functional skills.</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <button class="btn">Select for Bonus ($10)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Processing -->
+                    <div class="demo-card" style="grid-column: 1 / -1;">
+                        <h4>💰 Payment Summary</h4>
+                        <div style="background: #e8f5e8; padding: 20px; border-radius: 8px;">
+                            <p><strong>Base Payments:</strong> $5 × 12 responses = $60 (already allocated)</p>
+                            <p><strong>Bonus Budget:</strong> $30 remaining for exceptional feedback</p>
+                            <p><strong>Selected for Bonus:</strong> 0 responses</p>
+                            <p><strong>Total Cost:</strong> $60 (base only)</p>
+                        </div>
+                        <button class="btn" style="width: 100%; margin-top: 20px;">Process All Payments</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'request';
+        let previousSection = 'request';
+
+        function showSection(sectionName) {
+            // Store previous section for back navigation
+            previousSection = currentSection;
+            currentSection = sectionName;
+            
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.remove('hidden');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function showRequestDetail(requestType) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show request detail section
+            document.getElementById('request-detail-section').classList.remove('hidden');
+            
+            // Update content based on request type
+            if (requestType === 'design-portfolio') {
+                document.getElementById('request-title').textContent = '🎨 Design Portfolio Review';
+                document.getElementById('request-author').innerHTML = 'by <span class="farcaster-badge">@alice</span>';
+                document.getElementById('request-description').textContent = 'I\'m applying for senior UI/UX designer positions and need feedback on my portfolio. I\'ve been working on it for months but want to make sure it effectively showcases my skills and experience. I\'m particularly concerned about the case studies section and whether my design process is clearly communicated.';
+            } else if (requestType === 'code-review') {
+                document.getElementById('request-title').textContent = '💻 Code Review';
+                document.getElementById('request-author').innerHTML = 'by <span class="farcaster-badge">@bob</span>';
+                document.getElementById('request-description').textContent = 'I need feedback on my React component architecture. I\'ve been building a complex dashboard and want to ensure my code is maintainable, performant, and follows best practices. I\'m particularly interested in feedback on state management and component composition.';
+            } else if (requestType === 'business-plan') {
+                document.getElementById('request-title').textContent = '📝 Business Plan Feedback';
+                document.getElementById('request-author').innerHTML = 'by <span class="farcaster-badge">@charlie</span>';
+                document.getElementById('request-description').textContent = 'I\'m seeking input on my startup pitch deck and business model. I\'ve been working on this for several months and want to make sure it effectively communicates the value proposition and market opportunity. I need feedback on clarity, persuasiveness, and potential investor concerns.';
+            }
+        }
+
+        function showMyRequestDetail(requestType) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show my request detail section
+            document.getElementById('my-request-detail-section').classList.remove('hidden');
+            
+            // Update content based on request type
+            if (requestType === 'portfolio-review') {
+                document.querySelector('#my-request-detail-section .section-title').textContent = 'My Request: Portfolio Review';
+                document.querySelector('#my-request-detail-section h3').textContent = '🎨 Design Portfolio Review';
+            } else if (requestType === 'code-review-own') {
+                document.querySelector('#my-request-detail-section .section-title').textContent = 'My Request: Code Review';
+                document.querySelector('#my-request-detail-section h3').textContent = '💻 Code Review';
+            }
+        }
+
+        function goBack() {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show previous section
+            document.getElementById(previousSection + '-section').classList.remove('hidden');
+            
+            // Reset current section
+            currentSection = previousSection;
+        }
+
+        function toggleResponse(responseId) {
+            const responseElement = document.getElementById(responseId);
+            responseElement.classList.toggle('hidden');
+        }
+
+        // Demo interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate questionnaire generation
+            const generateBtn = document.querySelector('.mock-form .btn');
+            if (generateBtn && generateBtn.textContent === 'Generate Questions') {
+                generateBtn.addEventListener('click', function() {
+                    document.getElementById('questionnaire-preview').classList.remove('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
