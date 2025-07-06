@@ -1,0 +1,5 @@
+---
+description: Use this to get high-level understanding of codebase technical architecture 
+alwaysApply: false
+---
+Technical architecture overview document is locate at: `/docs/technical_architecture_overview.md`
