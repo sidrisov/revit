@@ -14,8 +14,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #222;
+            background: #f8f9fa;
             min-height: 100vh;
         }
 
@@ -27,7 +27,7 @@
 
         .header {
             text-align: center;
-            color: white;
+            color: #222;
             margin-bottom: 40px;
         }
 
@@ -35,41 +35,12 @@
             font-size: 3rem;
             margin-bottom: 10px;
             font-weight: 700;
+            color: #222;
         }
 
         .header p {
             font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-            background: white;
-            border-radius: 12px;
-            padding: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-
-        .nav-tab {
-            padding: 12px 24px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            color: #666;
-        }
-
-        .nav-tab.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .nav-tab:hover:not(.active) {
-            background: #f0f0f0;
+            color: #555;
         }
 
         .content-section {
@@ -83,7 +54,7 @@
         .section-title {
             font-size: 2rem;
             margin-bottom: 20px;
-            color: #333;
+            color: #222;
             text-align: center;
         }
 
@@ -116,11 +87,11 @@
 
         .step h3 {
             margin-bottom: 10px;
-            color: #333;
+            color: #222;
         }
 
         .step p {
-            color: #666;
+            color: #555;
             font-size: 0.95rem;
         }
 
@@ -153,11 +124,11 @@
 
         .demo-card h4 {
             margin-bottom: 10px;
-            color: #333;
+            color: #222;
         }
 
         .demo-card p {
-            color: #666;
+            color: #555;
             font-size: 0.9rem;
             margin-bottom: 15px;
         }
@@ -194,21 +165,22 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 500;
+            color: #222;
         }
 
         .status-success {
             background: #d4edda;
-            color: #155724;
+            color: #217a36;
         }
 
         .status-pending {
             background: #fff3cd;
-            color: #856404;
+            color: #a67c00;
         }
 
         .status-info {
             background: #d1ecf1;
-            color: #0c5460;
+            color: #217a8b;
         }
 
         .mock-form {
@@ -226,7 +198,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #333;
+            color: #222;
         }
 
         .form-group input,
@@ -237,6 +209,7 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 1rem;
+            color: #222;
         }
 
         .form-group textarea {
@@ -268,7 +241,7 @@
 
         .farcaster-badge {
             background: #8B5CF6;
-            color: white;
+            color: #fff;
             padding: 4px 8px;
             border-radius: 4px;
             font-size: 0.8rem;
@@ -287,33 +260,124 @@
             .content-section {
                 padding: 20px;
             }
-            
-            .nav-tabs {
-                flex-direction: column;
+        }
+
+        /* App Bar Styles */
+        .app-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 56px;
+            background: rgba(255,255,255,0.92);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .app-bar-content {
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .app-logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #222;
+            letter-spacing: 1px;
+        }
+        .app-bar-icon {
+            display: flex;
+            align-items: center;
+            color: #222;
+        }
+        .app-bar-icon svg {
+            stroke: #222;
+        }
+        /* Bottom Navigation Styles */
+        .bottom-nav {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100vw;
+            height: 64px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            outline: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 0 2px;
+            color: #667eea;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            height: 100%;
+        }
+        .nav-btn.active {
+            color: #fff;
+            background: #667eea;
+            border-radius: 12px 12px 0 0;
+        }
+        .nav-btn.active .nav-icon svg {
+            stroke: #fff;
+        }
+        .nav-icon {
+            margin-bottom: 2px;
+        }
+        .nav-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        /* Padding for content */
+        .container {
+            padding-top: 70px;
+            padding-bottom: 80px;
+        }
+        @media (max-width: 600px) {
+            .app-bar-content, .container {
+                padding-left: 8px;
+                padding-right: 8px;
             }
-            
-            .nav-tab {
-                margin-bottom: 5px;
+            .container {
+                padding-top: 62px;
+                padding-bottom: 76px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Top App Bar -->
+    <div class="app-bar">
+        <div class="app-bar-content">
+            <span class="app-logo">🎯 Revit</span>
+            <span class="app-bar-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-2.2 3.6-4 8-4s8 1.8 8 4"/></svg>
+            </span>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>🎯 Revit</h1>
             <p>AI-Powered Feedback Platform on Farcaster</p>
         </div>
 
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('request')">Request Feedback</button>
-            <button class="nav-tab" onclick="showSection('respond')">Respond to Requests</button>
-            <button class="nav-tab" onclick="showSection('manage')">Manage Requests</button>
-        </div>
-
         <!-- Feedback Request Flow -->
         <div id="request-section" class="content-section">
-            <h2 class="section-title">Request Feedback Flow</h2>
+            <h2 class="section-title">Request Feedback</h2>
             
             <div class="flow-steps">
                 <div class="step">
@@ -384,7 +448,7 @@
 
         <!-- Feedback Response Flow -->
         <div id="respond-section" class="content-section hidden">
-            <h2 class="section-title">Respond to Feedback Requests</h2>
+            <h2 class="section-title">Respond to Requests</h2>
             
             <div class="flow-steps">
                 <div class="step">
@@ -501,7 +565,7 @@
 
         <!-- Feedback Management Flow -->
         <div id="manage-section" class="content-section hidden">
-            <h2 class="section-title">Manage Your Requests</h2>
+            <h2 class="section-title">Manage Requests</h2>
             
             <div class="flow-steps">
                 <div class="step">
@@ -671,6 +735,34 @@
         </div>
     </div>
 
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" onclick="showSection('request')">
+            <span class="nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 4l9 8"/><path d="M9 21V9h6v12"/></svg>
+            </span>
+            <span class="nav-label">Request</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('respond')">
+            <span class="nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 4v2a3 3 0 0 0 6 0V4"/></svg>
+            </span>
+            <span class="nav-label">Respond</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('manage')">
+            <span class="nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M17 17a5 5 0 0 0 5-5V5H2v7a5 5 0 0 0 5 5"/><path d="M7 5V3h10v2"/></svg>
+            </span>
+            <span class="nav-label">Manage</span>
+        </button>
+        <button class="nav-btn" onclick="alert('Settings coming soon!')">
+            <span class="nav-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 11 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </span>
+            <span class="nav-label">Settings</span>
+        </button>
+    </nav>
+
     <script>
         let currentSection = 'request';
         let previousSection = 'request';
@@ -695,6 +787,13 @@
             
             // Add active class to clicked tab
             event.target.classList.add('active');
+
+            // Remove active from all nav-btns
+            document.querySelectorAll('.bottom-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
+            // Add active to the correct nav-btn
+            if(sectionName === 'request') document.querySelectorAll('.bottom-nav .nav-btn')[0].classList.add('active');
+            if(sectionName === 'respond') document.querySelectorAll('.bottom-nav .nav-btn')[1].classList.add('active');
+            if(sectionName === 'manage') document.querySelectorAll('.bottom-nav .nav-btn')[2].classList.add('active');
         }
 
         function showRequestDetail(requestType) {
