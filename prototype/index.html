@@ -456,8 +456,39 @@
 
     <div class="container">
         <div class="header">
-            <h1>🎯 Revit</h1>
             <p>AI-Powered Feedback Platform on Farcaster</p>
+        </div>
+        <!-- How It Works Modal -->
+        <div id="howitworks-modal" class="onboarding-overlay" style="display:none;">
+            <div class="onboarding-modal">
+                <button class="onboarding-close" onclick="closeHowItWorks()">&times;</button>
+                <h2>How It Works?</h2>
+                <p class="onboarding-sub">A quick guide to requesting and giving feedback on Revit</p>
+                <div class="onboarding-features">
+                    <div class="onboarding-feature">
+                        <span class="onboarding-icon">📝</span>
+                        <div>
+                            <div class="onboarding-title">Request Feedback</div>
+                            <div class="onboarding-desc">Describe your needs (voice or text), set a deposit, and publish your request. AI generates a questionnaire for you.</div>
+                        </div>
+                    </div>
+                    <div class="onboarding-feature">
+                        <span class="onboarding-icon">🔍</span>
+                        <div>
+                            <div class="onboarding-title">Contributors Respond</div>
+                            <div class="onboarding-desc">Others browse requests, answer your questions, and submit feedback to earn rewards.</div>
+                        </div>
+                    </div>
+                    <div class="onboarding-feature">
+                        <span class="onboarding-icon">🤖</span>
+                        <div>
+                            <div class="onboarding-title">AI-Powered Review</div>
+                            <div class="onboarding-desc">AI summarizes and scores responses, helping you select the best feedback and distribute bonuses.</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn onboarding-btn" onclick="closeHowItWorks()">Got it!</button>
+            </div>
         </div>
 
         <!-- Onboarding Modal -->
@@ -873,11 +904,16 @@
             </span>
             <span class="nav-label">Manage</span>
         </button>
-        <button class="nav-btn" onclick="alert('Settings coming soon!')">
+        <button class="nav-btn" onclick="showHowItWorks()">
             <span class="nav-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09A1.65 1.65 0 0 0 11 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <!-- Question mark icon for help/about -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 1 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12" y2="17"/>
+                </svg>
             </span>
-            <span class="nav-label">Settings</span>
+            <span class="nav-label">Help</span>
         </button>
     </nav>
 
@@ -995,6 +1031,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('onboarding-modal').style.display = 'flex';
         });
+
+        function showWelcomeDialog() {
+            document.getElementById('onboarding-modal').style.display = 'flex';
+        }
+
+        function showHowItWorks() {
+            document.getElementById('howitworks-modal').style.display = 'flex';
+        }
+        function closeHowItWorks() {
+            document.getElementById('howitworks-modal').style.display = 'none';
+        }
     </script>
 </body>
 </html> 
