@@ -122,7 +122,7 @@ CREATE TABLE payments (
 );
 ```
 
-### **IPFS Storage Strategy**
+### **IPFS Storage Strategy (Pinata)**
 
 ```typescript
 // Storage Schema
@@ -145,6 +145,13 @@ interface IPFSStorageSchema {
     }
   };
 }
+
+// Pinata Configuration
+const pinataConfig = {
+  apiKey: process.env.PINATA_API_KEY,
+  secretApiKey: process.env.PINATA_SECRET_KEY,
+  gateway: 'https://gateway.pinata.cloud/ipfs/',
+};
 ```
 
 ---
@@ -808,22 +815,21 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v1
         with:
-          node-version: '20'
-          cache: 'npm'
+          bun-version: latest
       
       - name: Install dependencies
-        run: npm ci
+        run: bun install --frozen-lockfile
       
       - name: Run tests
-        run: npm run test:ci
+        run: bun run test:ci
       
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: bun run test:e2e
       
       - name: Security scan
-        run: npm audit --audit-level moderate
+        run: bun audit --audit-level moderate
 
   deploy-contracts:
     needs: test
@@ -949,17 +955,17 @@ paths:
 # Revit Development Setup
 
 ## Prerequisites
-- Node.js 20+
+- Bun 1.0+
 - Docker & Docker Compose
 - Git
 - Foundry (for smart contracts)
 
 ## Quick Start
 1. Clone repository: `git clone https://github.com/org/revit`
-2. Install dependencies: `npm install`
+2. Install dependencies: `bun install`
 3. Start services: `docker-compose up -d`
-4. Run migrations: `npm run db:migrate`
-5. Start development: `npm run dev`
+4. Run migrations: `bun run db:migrate`
+5. Start development: `bun run dev`
 
 ## Environment Setup
 Copy `.env.example` to `.env` and configure:
@@ -969,14 +975,14 @@ Copy `.env.example` to `.env` and configure:
 - Blockchain RPC URL
 
 ## Testing
-- Unit tests: `npm run test`
-- Integration tests: `npm run test:integration`
-- E2E tests: `npm run test:e2e`
-- Contract tests: `npm run test:contracts`
+- Unit tests: `bun run test`
+- Integration tests: `bun run test:integration`
+- E2E tests: `bun run test:e2e`
+- Contract tests: `bun run test:contracts`
 
 ## Deployment
-- Staging: `npm run deploy:staging`
-- Production: `npm run deploy:prod`
+- Staging: `bun run deploy:staging`
+- Production: `bun run deploy:prod`
 ```
 
 ---

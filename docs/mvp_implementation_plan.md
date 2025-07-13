@@ -35,22 +35,28 @@
 
 ### **Day 1: Setup & Foundation**
 
-## 📁 **Simple Project Structure**
+## 📁 **Monorepo Structure**
 
 ```
-src/
-├── components/
-│   ├── ui/          # Basic button, input, card
-│   └── layout/      # Navigation only
-├── pages/
-│   ├── CreateRequest.tsx
-│   ├── BrowseRequests.tsx
-│   └── ManageRequests.tsx
-├── store/
-│   └── useStore.ts  # Single Zustand store
-├── types.ts
-├── mockData.ts
-└── App.tsx
+packages/
+├── web/                # Frontend MVP
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── ui/     # Basic button, input, card
+│   │   │   └── layout/ # Navigation only
+│   │   ├── pages/
+│   │   │   ├── CreateRequest.tsx
+│   │   │   ├── BrowseRequests.tsx
+│   │   │   └── ManageRequests.tsx
+│   │   ├── store/
+│   │   │   └── useStore.ts  # Single Zustand store
+│   │   ├── types.ts
+│   │   ├── mockData.ts
+│   │   └── App.tsx
+│   ├── package.json
+│   └── vite.config.ts
+├── api/                # Future backend
+└── contracts/          # Future smart contracts
 ```
 
 ## 🗄️ **Minimal Mock Data**
@@ -80,19 +86,21 @@ interface Response {
 ## ⚡ **Quick Start Commands**
 
 ```bash
-# 15 minutes setup
-npm create vite@latest revit-mvp -- --template react-ts
-cd revit-mvp
-npm install zustand react-router-dom tailwindcss lucide-react
-npx tailwindcss init -p
-npm run dev
+# 15 minutes setup (from root of revit monorepo)
+mkdir -p packages/web
+cd packages/web
+bun create vite@latest . -- --template react-ts
+bun add zustand react-router-dom tailwindcss lucide-react react-hook-form zod
+bunx tailwindcss init -p
+bun run dev
 ```
 
 ---
 
 #### ⏰ **Morning (2-3 hours)**
-- [ ] Initialize Vite + React + TypeScript
-- [ ] Install TailwindCSS + shadcn/ui basics
+- [ ] Create packages/web directory
+- [ ] Initialize Vite + React + TypeScript in packages/web
+- [ ] Install TailwindCSS + basic dependencies
 - [ ] Set up React Router with 3 routes
 - [ ] Create basic app layout with navigation
 
@@ -156,7 +164,7 @@ npm run dev
 - [ ] Demo data preparation
 - [ ] End-to-end flow testing
 - [ ] Performance optimization
-- [ ] Deploy to Vercel
+- [ ] Deploy to Vercel with `bunx vercel`
 
 ---
 
