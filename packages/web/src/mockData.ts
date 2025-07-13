@@ -1,4 +1,4 @@
-import { Request } from './store/useStore';
+import { type Request } from './store/useStore';
 
 export const mockRequests: Request[] = [
   {

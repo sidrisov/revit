@@ -1,4 +1,5 @@
-import create from 'zustand';
+import { create } from 'zustand';
+import { mockRequests } from '../mockData';
 
 export interface Response {
   id: string;
@@ -26,6 +27,6 @@ interface StoreState {
 }
 
 export const useStore = create<StoreState>((set) => ({
-  requests: [],
+  requests: mockRequests,
   setRequests: (requests) => set({ requests }),
 }));
