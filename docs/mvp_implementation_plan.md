@@ -45,7 +45,7 @@ revit/                      # Root workspace
 │   ├── web/               # Frontend MVP
 │   │   ├── src/
 │   │   │   ├── components/
-│   │   │   │   ├── ui/    # Basic button, input, card
+│   │   │   │   ├── ui/    # shadcn/ui components
 │   │   │   │   └── layout/# Navigation only
 │   │   │   ├── pages/
 │   │   │   │   ├── CreateRequest.tsx
@@ -58,7 +58,9 @@ revit/                      # Root workspace
 │   │   │   └── App.tsx
 │   │   ├── package.json   # Frontend dependencies
 │   │   ├── vite.config.ts
-│   │   └── tailwind.config.js
+│   │   ├── components.json  # shadcn/ui config
+│   │   └── lib/
+│   │       └── utils.ts    # shadcn/ui utils
 │   ├── api/               # Future backend
 │   │   └── package.json
 │   └── contracts/         # Future smart contracts
@@ -123,9 +125,10 @@ mkdir -p packages/web packages/api packages/contracts
 
 # 3. Initialize frontend package
 cd packages/web
-bun create vite@latest . -- --template react-ts
-bun add zustand react-router-dom tailwindcss lucide-react react-hook-form zod
-bunx tailwindcss init -p
+bun create vite@latest . -- --template react-router
+bun add zustand react-router-dom lucide-react react-hook-form zod
+bunx shadcn@latest init
+bunx shadcn@latest add button card input textarea
 
 # 4. Install all workspace dependencies
 cd ../..
@@ -145,7 +148,7 @@ bun run --filter web dev
 - [ ] Verify `bun run dev` works from root
 
 #### ⏰ **Afternoon (3-4 hours)**
-- [ ] Install TailwindCSS + dependencies in web package
+- [ ] Setup shadcn/ui and install essential components
 - [ ] Set up React Router with 3 routes
 - [ ] Set up Zustand store structure
 - [ ] Create mock data file with 5-10 sample requests
@@ -247,7 +250,11 @@ bun run --filter web dev
     "vite": "^6.0.0",
     "tailwindcss": "^4.0.0",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0"
+    "@types/react-dom": "^19.0.0",
+    "@radix-ui/react-slot": "latest",
+    "class-variance-authority": "latest", 
+    "clsx": "latest",
+    "tailwind-merge": "latest"
   }
 }
 ```
