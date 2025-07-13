@@ -35,28 +35,54 @@
 
 ### **Day 1: Setup & Foundation**
 
-## 📁 **Monorepo Structure**
+## 📁 **Bun Workspace Structure**
 
 ```
-packages/
-├── web/                # Frontend MVP
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── ui/     # Basic button, input, card
-│   │   │   └── layout/ # Navigation only
-│   │   ├── pages/
-│   │   │   ├── CreateRequest.tsx
-│   │   │   ├── BrowseRequests.tsx
-│   │   │   └── ManageRequests.tsx
-│   │   ├── store/
-│   │   │   └── useStore.ts  # Single Zustand store
-│   │   ├── types.ts
-│   │   ├── mockData.ts
-│   │   └── App.tsx
-│   ├── package.json
-│   └── vite.config.ts
-├── api/                # Future backend
-└── contracts/          # Future smart contracts
+revit/                      # Root workspace
+├── package.json            # Workspace config
+├── bun.lockb              # Bun lockfile
+├── packages/
+│   ├── web/               # Frontend MVP
+│   │   ├── src/
+│   │   │   ├── components/
+│   │   │   │   ├── ui/    # Basic button, input, card
+│   │   │   │   └── layout/# Navigation only
+│   │   │   ├── pages/
+│   │   │   │   ├── CreateRequest.tsx
+│   │   │   │   ├── BrowseRequests.tsx
+│   │   │   │   └── ManageRequests.tsx
+│   │   │   ├── store/
+│   │   │   │   └── useStore.ts  # Single Zustand store
+│   │   │   ├── types.ts
+│   │   │   ├── mockData.ts
+│   │   │   └── App.tsx
+│   │   ├── package.json   # Frontend dependencies
+│   │   ├── vite.config.ts
+│   │   └── tailwind.config.js
+│   ├── api/               # Future backend
+│   │   └── package.json
+│   └── contracts/         # Future smart contracts
+│       └── package.json
+└── docs/                  # Documentation
+```
+
+### **Root package.json (Workspace Configuration)**
+
+```json
+{
+  "name": "revit",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev": "bun run --filter web dev",
+    "build": "bun run --filter web build",
+    "preview": "bun run --filter web preview",
+    "install:all": "bun install"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}
 ```
 
 ## 🗄️ **Minimal Mock Data**
@@ -87,28 +113,43 @@ interface Response {
 
 ```bash
 # 15 minutes setup (from root of revit monorepo)
-mkdir -p packages/web
+
+# 1. Initialize Bun workspace
+echo '{"name": "revit", "workspaces": ["packages/*"]}' > package.json
+bun init
+
+# 2. Create packages structure
+mkdir -p packages/web packages/api packages/contracts
+
+# 3. Initialize frontend package
 cd packages/web
 bun create vite@latest . -- --template react-ts
 bun add zustand react-router-dom tailwindcss lucide-react react-hook-form zod
 bunx tailwindcss init -p
-bun run dev
+
+# 4. Install all workspace dependencies
+cd ../..
+bun install
+
+# 5. Start development
+bun run --filter web dev
 ```
 
 ---
 
 #### ⏰ **Morning (2-3 hours)**
-- [ ] Create packages/web directory
+- [ ] Initialize Bun workspace at root level
+- [ ] Create packages structure (web, api, contracts)
 - [ ] Initialize Vite + React + TypeScript in packages/web
-- [ ] Install TailwindCSS + basic dependencies
-- [ ] Set up React Router with 3 routes
-- [ ] Create basic app layout with navigation
+- [ ] Configure workspace dependencies and scripts
+- [ ] Verify `bun run dev` works from root
 
 #### ⏰ **Afternoon (3-4 hours)**
+- [ ] Install TailwindCSS + dependencies in web package
+- [ ] Set up React Router with 3 routes
 - [ ] Set up Zustand store structure
 - [ ] Create mock data file with 5-10 sample requests
-- [ ] Build basic navigation bar
-- [ ] Create homepage/dashboard skeleton
+- [ ] Build basic navigation and layout
 
 ### **Day 2: Request Creation Flow**
 
@@ -164,24 +205,50 @@ bun run dev
 - [ ] Demo data preparation
 - [ ] End-to-end flow testing
 - [ ] Performance optimization
-- [ ] Deploy to Vercel with `bunx vercel`
+- [ ] Deploy web package to Vercel with `bunx vercel packages/web`
 
 ---
 
-## 📦 **Minimal Dependencies**
+## 📦 **Workspace Dependencies**
 
+### **Root package.json**
 ```json
 {
-  "react": "^19.0.0",
-  "react-dom": "^19.0.0",
-  "react-router-dom": "^7.0.0",
-  "typescript": "^5.7.0",
-  "vite": "^6.0.0",
-  "zustand": "^5.0.0",
-  "tailwindcss": "^4.0.0",
-  "lucide-react": "latest",
-  "react-hook-form": "^7.0.0",
-  "zod": "^3.0.0"
+  "name": "revit",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}
+```
+
+### **packages/web/package.json**
+```json
+{
+  "name": "@revit/web",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.0.0",
+    "zustand": "^5.0.0",
+    "lucide-react": "latest",
+    "react-hook-form": "^7.0.0",
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0",
+    "tailwindcss": "^4.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
+  }
 }
 ```
 

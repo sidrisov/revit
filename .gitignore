@@ -205,6 +205,8 @@ PublishScripts/
 **/[Pp]ackages/*
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
+# Allow monorepo packages directory
+!/packages/*
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/[Pp]ackages/repositories.config
 # NuGet v3's project.json files produces more ignorable files
@@ -408,3 +410,4 @@ FodyWeavers.xsd
 .cursor
 .claude
 *.env*
+.vite
