@@ -1,19 +1,24 @@
-import type { Route } from "./+types/home";
-import { useState } from "react";
-import CreateRequest from "../pages/CreateRequest";
-import BrowseRequests from "../pages/BrowseRequests";
-import ManageRequests from "../pages/ManageRequests";
-import { Mic, Search, BarChart3 } from "lucide-react";
+import type { Route } from './+types/home';
+import { useState } from 'react';
+import CreateRequest from '../pages/CreateRequest';
+import BrowseRequests from '../pages/BrowseRequests';
+import ManageRequests from '../pages/ManageRequests';
+import { Mic, Search, BarChart3 } from 'lucide-react';
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Revit - AI-Powered Feedback Platform" },
-    { name: "description", content: "Get feedback on your projects with AI-powered questionnaires" },
+    { title: 'Revit - AI-Powered Feedback Platform' },
+    {
+      name: 'description',
+      content: 'Get feedback on your projects with AI-powered questionnaires',
+    },
   ];
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<'create' | 'browse' | 'manage'>('create');
+  const [activeTab, setActiveTab] = useState<'create' | 'browse' | 'manage'>(
+    'create'
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
@@ -33,35 +38,9 @@ export default function Home() {
                 <span className="text-lg">✨</span>
               </div>
             </div>
-            <div className="flex justify-center space-x-1 pb-4">
-              {[
-                { key: 'create', icon: Mic, label: 'Create', color: 'bg-emerald-500', description: 'New Request' },
-                { key: 'browse', icon: Search, label: 'Browse', color: 'bg-blue-500', description: 'Find Projects' },
-                { key: 'manage', icon: BarChart3, label: 'Manage', color: 'bg-pink-500', description: 'Your Requests' }
-              ].map(({ key, icon: Icon, label, color, description }) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveTab(key as any)}
-                  className={`
-                    relative group px-4 py-3 rounded-2xl font-bold transition-all duration-300 flex flex-col items-center gap-1 text-white shadow-lg text-xs
-                    ${activeTab === key 
-                      ? `${color} scale-110 shadow-2xl ring-4 ring-white/50` 
-                      : `${color} opacity-80 hover:opacity-100 hover:scale-105`
-                    }
-                  `}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="hidden sm:inline">{label}</span>
-                  
-                  {/* Tooltip */}
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-2 py-1 rounded-lg text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                    {description}
-                  </div>
-                </button>
-              ))}
-            </div>
+            {/* Removed action buttons from mobile header - now in bottom nav */}
           </div>
-          
+
           {/* Desktop Layout */}
           <div className="hidden md:flex justify-between items-center py-5">
             <div className="flex items-center gap-3">
@@ -72,50 +51,131 @@ export default function Home() {
                 <h1 className="text-3xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                   Revit
                 </h1>
-                <p className="text-xs text-slate-500 font-medium">AI-Powered Feedback Platform</p>
+                <p className="text-xs text-slate-500 font-medium">
+                  AI-Powered Feedback Platform
+                </p>
               </div>
             </div>
-            
+
             <div className="flex space-x-2">
               {[
-                { key: 'create', icon: Mic, label: 'Create Request', color: 'bg-emerald-500', hoverColor: 'hover:bg-emerald-600', description: 'Start a new feedback request' },
-                { key: 'browse', icon: Search, label: 'Browse Projects', color: 'bg-blue-500', hoverColor: 'hover:bg-blue-600', description: 'Find projects to give feedback on' },
-                { key: 'manage', icon: BarChart3, label: 'Manage', color: 'bg-pink-500', hoverColor: 'hover:bg-pink-600', description: 'Manage your requests' }
-              ].map(({ key, icon: Icon, label, color, hoverColor, description }) => (
-                <button
-                  key={key}
-                  onClick={() => setActiveTab(key as any)}
-                  className={`
+                {
+                  key: 'create',
+                  icon: Mic,
+                  label: 'Create Request',
+                  color: 'bg-emerald-500',
+                  hoverColor: 'hover:bg-emerald-600',
+                  description: 'Start a new feedback request',
+                },
+                {
+                  key: 'browse',
+                  icon: Search,
+                  label: 'Browse Projects',
+                  color: 'bg-blue-500',
+                  hoverColor: 'hover:bg-blue-600',
+                  description: 'Find projects to give feedback on',
+                },
+                {
+                  key: 'manage',
+                  icon: BarChart3,
+                  label: 'Manage',
+                  color: 'bg-pink-500',
+                  hoverColor: 'hover:bg-pink-600',
+                  description: 'Manage your requests',
+                },
+              ].map(
+                ({
+                  key,
+                  icon: Icon,
+                  label,
+                  color,
+                  hoverColor,
+                  description,
+                }) => (
+                  <button
+                    key={key}
+                    onClick={() => setActiveTab(key as any)}
+                    className={`
                     relative group px-6 py-3 rounded-2xl font-bold transition-all duration-300 flex items-center gap-3 text-white shadow-lg transform hover:scale-105 hover:-translate-y-1
-                    ${activeTab === key 
-                      ? `${color} scale-105 shadow-2xl ring-4 ring-white/50 -translate-y-1` 
-                      : `${color} ${hoverColor} opacity-90 hover:opacity-100`
+                    ${
+                      activeTab === key
+                        ? `${color} scale-105 shadow-2xl ring-4 ring-white/50 -translate-y-1`
+                        : `${color} ${hoverColor} opacity-90 hover:opacity-100`
                     }
-                  `}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span className="text-sm font-black">{label}</span>
-                  
-                  {/* Tooltip */}
-                  <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-3 py-2 rounded-xl text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
-                    {description}
-                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-800"></div>
-                  </div>
-                </button>
-              ))}
+                  `}>
+                    <Icon className="w-5 h-5" />
+                    <span className="text-sm font-black">{label}</span>
+
+                    {/* Tooltip */}
+                    <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-3 py-2 rounded-xl text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                      {description}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-800"></div>
+                    </div>
+                  </button>
+                )
+              )}
             </div>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <main className="max-w-[1200px] mx-auto py-4 sm:py-8 px-3 sm:px-5">
+      <main className="max-w-[1200px] mx-auto py-4 sm:py-8 px-3 sm:px-5 pb-32 md:pb-8">
         <div className="animate-fade-in">
           {activeTab === 'create' && <CreateRequest />}
           {activeTab === 'browse' && <BrowseRequests />}
           {activeTab === 'manage' && <ManageRequests />}
         </div>
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full z-50">
+        {/* Action Buttons Row */}
+        <div className="bg-white/95 shadow-sm border-t border-gray-200 px-4 py-3">
+          <div className="flex justify-center gap-4">
+            {[
+              {
+                key: 'create',
+                icon: Mic,
+                color: 'bg-emerald-500',
+                description: 'New Request',
+              },
+              {
+                key: 'browse',
+                icon: Search,
+                color: 'bg-blue-500',
+                description: 'Find Projects',
+              },
+              {
+                key: 'manage',
+                icon: BarChart3,
+                color: 'bg-pink-500',
+                description: 'Your Requests',
+              },
+            ].map(({ key, icon: Icon, color, description }) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key as any)}
+                className={`
+                  relative group p-4 rounded-full transition-all duration-200 flex items-center justify-center text-white shadow-lg
+                  ${
+                    activeTab === key
+                      ? `${color} scale-110 shadow-xl ring-2 ring-white/50`
+                      : `${color} opacity-80 hover:opacity-100 hover:scale-105`
+                  }
+                `}
+                title={description}>
+                <Icon className="w-6 h-6" />
+
+                {/* Tooltip */}
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-2 py-1 rounded-lg text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                  {description}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

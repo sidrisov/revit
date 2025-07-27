@@ -48,7 +48,7 @@ const AppRoutes: React.FC = () => {
     <>
       <Toaster position="top-center" richColors />
       <AppBar />
-      <div className="pt-16 pb-20 min-h-screen bg-gray-50">
+      <div className="pt-16 pb-32 min-h-screen bg-gray-50">
         <Routes>
           <Route path="/" element={<CreateRequest />} />
           <Route path="/browse" element={<BrowseRequests />} />
