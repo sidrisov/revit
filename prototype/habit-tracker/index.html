@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitKit - Track Your Habits</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f23;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: #a0a0a0;
+            font-size: 16px;
+        }
+
+        .add-habit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 24px;
+            transition: transform 0.2s;
+        }
+
+        .add-habit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .habits-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .habit-card {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #2a2a3e;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .habit-card:hover {
+            transform: translateY(-4px);
+            border-color: #667eea;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+        }
+
+        .habit-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .habit-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 16px;
+            color: white;
+        }
+
+        .habit-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .habit-info p {
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+
+        .progress-container {
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+            padding: 8px 0;
+        }
+
+        .progress-week {
+            display: grid;
+            grid-template-rows: repeat(7, 1fr);
+            gap: 3px;
+            min-height: 140px;
+        }
+
+        .progress-day {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #2a2a3e;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: transparent;
+        }
+
+        .progress-day.completed {
+            border-color: transparent;
+            color: white;
+        }
+
+        .progress-day.completed::before {
+            content: "✓";
+            font-weight: bold;
+        }
+
+        .progress-day:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            border-color: #667eea;
+        }
+
+        .progress-day.today {
+            border: 2px solid #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .progress-day.today.completed {
+            border: 2px solid #667eea;
+        }
+
+        .progress-day::after {
+            content: attr(data-date);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 100;
+            border: 1px solid #2a2a3e;
+        }
+
+        .progress-day:hover::after {
+            opacity: 1;
+        }
+
+        .timeline-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        .timeline-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            background: #2a2a3e;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .timeline-period {
+            font-size: 12px;
+            color: #a0a0a0;
+            font-weight: 500;
+        }
+
+        .zoom-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .zoom-btn {
+            background: #2a2a3e;
+            border: none;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+
+        .zoom-btn:hover {
+            background: #667eea;
+        }
+
+        .zoom-btn.active {
+            background: #667eea;
+        }
+
+        .habit-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .complete-btn {
+            background: #10b981;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .share-btn {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a0a0a0;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #2a2a3e;
+            border-radius: 8px;
+            background: #0f0f23;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .color-picker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .color-option.selected {
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .icon-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: #2a2a3e;
+            transition: all 0.2s;
+        }
+
+        .icon-option.selected {
+            background: #667eea;
+            transform: scale(1.1);
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #1a1a2e;
+            border-radius: 16px;
+            border: 1px solid #2a2a3e;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #a0a0a0;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+            
+            .habit-card {
+                padding: 16px;
+            }
+            
+            .progress-day {
+                width: 16px;
+                height: 16px;
+                font-size: 10px;
+            }
+            
+            .timeline-controls {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+            
+            .timeline-nav {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HabitKit</h1>
+            <p>Track your daily habits and build better routines</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalHabits">0</div>
+                <div class="stat-label">Habits</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="completedToday">0</div>
+                <div class="stat-label">Today</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="currentStreak">0</div>
+                <div class="stat-label">Streak</div>
+            </div>
+        </div>
+
+        <button class="add-habit-btn" onclick="openAddHabitModal()">
+            + Add New Habit
+        </button>
+
+        <div class="habits-grid" id="habitsGrid">
+            <!-- Habits will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Add/Edit Habit Modal -->
+    <div class="modal" id="habitModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Habit</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="habitForm">
+                <div class="form-group">
+                    <label for="habitName">Habit Name</label>
+                    <input type="text" id="habitName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="habitDescription">Description</label>
+                    <textarea id="habitDescription" rows="2"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="habitGoal">Goal (times per week)</label>
+                    <select id="habitGoal">
+                        <option value="1">1 time</option>
+                        <option value="2">2 times</option>
+                        <option value="3">3 times</option>
+                        <option value="4">4 times</option>
+                        <option value="5">5 times</option>
+                        <option value="6">6 times</option>
+                        <option value="7">Every day</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Color</label>
+                    <div class="color-picker" id="colorPicker">
+                        <div class="color-option selected" style="background: #f59e0b;" data-color="#f59e0b"></div>
+                        <div class="color-option" style="background: #ec4899;" data-color="#ec4899"></div>
+                        <div class="color-option" style="background: #8b5cf6;" data-color="#8b5cf6"></div>
+                        <div class="color-option" style="background: #3b82f6;" data-color="#3b82f6"></div>
+                        <div class="color-option" style="background: #10b981;" data-color="#10b981"></div>
+                        <div class="color-option" style="background: #ef4444;" data-color="#ef4444"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Icon</label>
+                    <div class="icon-grid" id="iconGrid">
+                        <div class="icon-option selected" data-icon="💪">💪</div>
+                        <div class="icon-option" data-icon="📚">📚</div>
+                        <div class="icon-option" data-icon="💻">💻</div>
+                        <div class="icon-option" data-icon="🎵">🎵</div>
+                        <div class="icon-option" data-icon="🏃">🏃</div>
+                        <div class="icon-option" data-icon="☕">☕</div>
+                        <div class="icon-option" data-icon="🧘">🧘</div>
+                        <div class="icon-option" data-icon="💰">💰</div>
+                        <div class="icon-option" data-icon="❤️">❤️</div>
+                        <div class="icon-option" data-icon="🎯">🎯</div>
+                        <div class="icon-option" data-icon="🌱">🌱</div>
+                        <div class="icon-option" data-icon="🎨">🎨</div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="save-btn">Save Habit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let habits = JSON.parse(localStorage.getItem('habits') || '[]');
+        let editingHabitIndex = -1;
+        let timelineViews = JSON.parse(localStorage.getItem('timelineViews') || '{}');
+
+        const colors = ['#f59e0b', '#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#ef4444'];
+        const icons = ['💪', '📚', '💻', '🎵', '🏃', '☕', '🧘', '💰', '❤️', '🎯', '🌱', '🎨'];
+
+        function initializeApp() {
+            renderHabits();
+            updateStats();
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            // Color picker
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+
+            // Icon picker
+            document.querySelectorAll('.icon-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+
+            // Form submission
+            document.getElementById('habitForm').addEventListener('submit', handleFormSubmit);
+        }
+
+        function openAddHabitModal() {
+            editingHabitIndex = -1;
+            document.getElementById('modalTitle').textContent = 'Add New Habit';
+            document.getElementById('habitForm').reset();
+            document.getElementById('habitModal').style.display = 'flex';
+        }
+
+        function openEditHabitModal(index) {
+            editingHabitIndex = index;
+            const habit = habits[index];
+            document.getElementById('modalTitle').textContent = 'Edit Habit';
+            document.getElementById('habitName').value = habit.name;
+            document.getElementById('habitDescription').value = habit.description;
+            document.getElementById('habitGoal').value = habit.goal;
+            
+            // Set selected color
+            document.querySelectorAll('.color-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.color === habit.color) {
+                    opt.classList.add('selected');
+                }
+            });
+            
+            // Set selected icon
+            document.querySelectorAll('.icon-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.icon === habit.icon) {
+                    opt.classList.add('selected');
+                }
+            });
+            
+            document.getElementById('habitModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('habitModal').style.display = 'none';
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('habitName').value;
+            const description = document.getElementById('habitDescription').value;
+            const goal = parseInt(document.getElementById('habitGoal').value);
+            const color = document.querySelector('.color-option.selected').dataset.color;
+            const icon = document.querySelector('.icon-option.selected').dataset.icon;
+            
+            const habit = {
+                id: Date.now(),
+                name,
+                description,
+                goal,
+                color,
+                icon,
+                progress: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            if (editingHabitIndex >= 0) {
+                habit.id = habits[editingHabitIndex].id;
+                habit.progress = habits[editingHabitIndex].progress;
+                habits[editingHabitIndex] = habit;
+            } else {
+                habits.push(habit);
+            }
+            
+            saveHabits();
+            renderHabits();
+            updateStats();
+            closeModal();
+        }
+
+        function toggleHabitDayByDate(habitIndex, dateString) {
+            const habit = habits[habitIndex];
+            const existingIndex = habit.progress.findIndex(p => p.date === dateString);
+            
+            if (existingIndex >= 0) {
+                habit.progress.splice(existingIndex, 1);
+            } else {
+                habit.progress.push({ date: dateString, completed: true });
+            }
+            
+            saveHabits();
+            renderHabits();
+            updateStats();
+        }
+
+        function navigateTimeline(habitIndex, days) {
+            const habit = habits[habitIndex];
+            const view = getTimelineView(habit.id);
+            view.offset += days;
+            saveTimelineViews();
+            renderHabits();
+        }
+
+        function setZoom(habitIndex, days) {
+            const habit = habits[habitIndex];
+            const view = getTimelineView(habit.id);
+            view.days = days;
+            saveTimelineViews();
+            renderHabits();
+        }
+
+        function deleteHabit(index) {
+            if (confirm('Are you sure you want to delete this habit?')) {
+                habits.splice(index, 1);
+                saveHabits();
+                renderHabits();
+                updateStats();
+            }
+        }
+
+        function shareHabit(index) {
+            const habit = habits[index];
+            const completedCount = habit.progress.length;
+            const message = `Check out my "${habit.name}" habit! I've completed it ${completedCount} times this week! 🎉`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Habit Progress',
+                    text: message
+                });
+            } else {
+                alert(message);
+            }
+        }
+
+        function getTimelineView(habitId) {
+            if (!timelineViews[habitId]) {
+                timelineViews[habitId] = {
+                    days: 7,
+                    offset: 0
+                };
+            }
+            return timelineViews[habitId];
+        }
+
+        function generateProgressGrid(habit, index, days = 7) {
+            const view = getTimelineView(habit.id);
+            const today = new Date();
+            const startDate = new Date(today);
+            startDate.setDate(today.getDate() + view.offset - days + 1);
+            
+            let gridHTML = '';
+            
+            // For now, let's keep it simple with a single row for 7 days
+            if (days <= 7) {
+                for (let i = 0; i < days; i++) {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + i);
+                    const dateString = date.toISOString().split('T')[0];
+                    const isCompleted = habit.progress.some(p => p.date === dateString);
+                    const isToday = dateString === today.toISOString().split('T')[0];
+                    const formattedDate = date.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+                    });
+                    
+                    gridHTML += `
+                        <div class="progress-day ${isCompleted ? 'completed' : ''} ${isToday ? 'today' : ''}" 
+                             style="background: ${isCompleted ? habit.color : 'transparent'}"
+                             data-date="${formattedDate}"
+                             onclick="toggleHabitDayByDate(${index}, '${dateString}')">
+                        </div>
+                    `;
+                }
+            } else {
+                // For longer periods, create a multi-week grid
+                const weeks = Math.ceil(days / 7);
+                
+                for (let week = 0; week < weeks; week++) {
+                    gridHTML += '<div class="progress-week">';
+                    
+                    for (let dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+                        const dayIndex = week * 7 + dayOfWeek;
+                        if (dayIndex >= days) {
+                            // Fill empty slots
+                            gridHTML += '<div class="progress-day" style="visibility: hidden;"></div>';
+                            continue;
+                        }
+                        
+                        const date = new Date(startDate);
+                        date.setDate(startDate.getDate() + dayIndex);
+                        const dateString = date.toISOString().split('T')[0];
+                        const isCompleted = habit.progress.some(p => p.date === dateString);
+                        const isToday = dateString === today.toISOString().split('T')[0];
+                        const formattedDate = date.toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+                        });
+                        
+                        gridHTML += `
+                            <div class="progress-day ${isCompleted ? 'completed' : ''} ${isToday ? 'today' : ''}" 
+                                 style="background: ${isCompleted ? habit.color : 'transparent'}"
+                                 data-date="${formattedDate}"
+                                 onclick="toggleHabitDayByDate(${index}, '${dateString}')">
+                            </div>
+                        `;
+                    }
+                    
+                    gridHTML += '</div>';
+                }
+            }
+            
+            return gridHTML;
+        }
+
+        function updateTimelinePeriod(habitId, days, offset) {
+            const today = new Date();
+            const startDate = new Date(today);
+            startDate.setDate(today.getDate() + offset - days + 1);
+            const endDate = new Date(today);
+            endDate.setDate(today.getDate() + offset);
+            
+            const startFormatted = startDate.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: startDate.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+            });
+            const endFormatted = endDate.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric',
+                year: endDate.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+            });
+            
+            return `${startFormatted} - ${endFormatted}`;
+        }
+
+        function renderHabits() {
+            const grid = document.getElementById('habitsGrid');
+            grid.innerHTML = '';
+            
+            habits.forEach((habit, index) => {
+                const card = document.createElement('div');
+                card.className = 'habit-card';
+                
+                const view = getTimelineView(habit.id);
+                const periodText = updateTimelinePeriod(habit.id, view.days, view.offset);
+                
+                card.innerHTML = `
+                    <div class="habit-header">
+                        <div class="habit-icon" style="background: ${habit.color}">
+                            ${habit.icon}
+                        </div>
+                        <div class="habit-info">
+                            <h3>${habit.name}</h3>
+                            <p>${habit.description || 'No description'}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-controls">
+                        <div class="timeline-nav">
+                            <button class="nav-btn" onclick="navigateTimeline(${index}, -30)">← 30d</button>
+                            <button class="nav-btn" onclick="navigateTimeline(${index}, -7)">← 7d</button>
+                            <button class="nav-btn" onclick="navigateTimeline(${index}, 7)">7d →</button>
+                            <button class="nav-btn" onclick="navigateTimeline(${index}, 30)">30d →</button>
+                        </div>
+                        <div class="timeline-period" id="period-${index}">${periodText}</div>
+                        <div class="zoom-controls">
+                            <button class="zoom-btn ${view.days === 7 ? 'active' : ''}" onclick="setZoom(${index}, 7)">7d</button>
+                            <button class="zoom-btn ${view.days === 30 ? 'active' : ''}" onclick="setZoom(${index}, 30)">30d</button>
+                            <button class="zoom-btn ${view.days === 90 ? 'active' : ''}" onclick="setZoom(${index}, 90)">90d</button>
+                            <button class="zoom-btn ${view.days === 365 ? 'active' : ''}" onclick="setZoom(${index}, 365)">1y</button>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-grid" id="progress-${index}">
+                            ${generateProgressGrid(habit, index, view.days)}
+                        </div>
+                    </div>
+                    
+                    <div class="habit-actions">
+                        <button class="action-btn complete-btn" onclick="toggleHabitDayByDate(${index}, '${new Date().toISOString().split('T')[0]}')">
+                            Complete
+                        </button>
+                        <button class="action-btn edit-btn" onclick="openEditHabitModal(${index})">
+                            Edit
+                        </button>
+                        <button class="action-btn share-btn" onclick="shareHabit(${index})">
+                            Share
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteHabit(${index})">
+                            Delete
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function updateStats() {
+            const totalHabits = habits.length;
+            const today = new Date().toISOString().split('T')[0];
+            const completedToday = habits.filter(habit => 
+                habit.progress.some(p => p.date === today)
+            ).length;
+            
+            // Calculate current streak (simplified)
+            const currentStreak = Math.max(...habits.map(habit => {
+                let streak = 0;
+                const today = new Date();
+                for (let i = 0; i < 30; i++) {
+                    const date = new Date(today);
+                    date.setDate(today.getDate() - i);
+                    const dateString = date.toISOString().split('T')[0];
+                    if (habit.progress.some(p => p.date === dateString)) {
+                        streak++;
+                    } else {
+                        break;
+                    }
+                }
+                return streak;
+            }), 0);
+            
+            document.getElementById('totalHabits').textContent = totalHabits;
+            document.getElementById('completedToday').textContent = completedToday;
+            document.getElementById('currentStreak').textContent = currentStreak;
+        }
+
+        function saveHabits() {
+            localStorage.setItem('habits', JSON.stringify(habits));
+        }
+
+        function saveTimelineViews() {
+            localStorage.setItem('timelineViews', JSON.stringify(timelineViews));
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('habitModal').addEventListener('click', (e) => {
+            if (e.target.id === 'habitModal') {
+                closeModal();
+            }
+        });
+
+        // Initialize the app
+        initializeApp();
+    </script>
+</body>
+</html> 
